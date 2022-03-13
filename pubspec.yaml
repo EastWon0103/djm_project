@@ -75,6 +75,10 @@ flutter:
     - image/train_menu.jpg
     - image/kookmin.jpeg
     - image/searchbar.png
+    - image/kakaotalk_login.png
+    - image/facebook_login.png
+    - image/google_login.png
+    - image/apple_login.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
