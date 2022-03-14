@@ -22,6 +22,10 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.orange),
+        routes: {
+          '/first': (BuildContext context) => LoginWidget(),
+          '/second': (BuildContext context) => MainGridView(),
+        },
         home: LoginWidget());
   }
 }
