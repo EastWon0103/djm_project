@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:djm/djm_style.dart';
@@ -14,10 +15,18 @@ class LoginWidget extends StatefulWidget {
 class _LoginWidget extends State<LoginWidget> {
   late bool _passwordVisible;
   late var _loginMaintain;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+  final CollectionReference _firestoreUser =
+      FirebaseFirestore.instance.collection('user');
 
   void initState() {
     _passwordVisible = false;
     _loginMaintain = false;
+  }
+
+  void _login(BuildContext context) {
+    Navigator.of(context).pushReplacementNamed('/main');
   }
 
   void _kakaoLogin() {
@@ -28,22 +37,30 @@ class _LoginWidget extends State<LoginWidget> {
     print("facebook");
   }
 
-  Future<void> _googleLogin() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    GoogleSignIn googleSignIn = GoogleSignIn();
-
-    GoogleSignInAccount? account = await googleSignIn.signIn();
+  Future<void> _googleLogin(BuildContext context) async {
+    final GoogleSignInAccount? account = await googleSignIn.signIn();
     GoogleSignInAuthentication? authentication = await account?.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: authentication?.accessToken,
+      idToken: authentication?.idToken,
+    );
+
+    final UserCredential authResult =
+        await _auth.signInWithCredential(credential);
+    final User? user = authResult.user;
+
+    DocumentSnapshot checking = await _firestoreUser.doc("${user?.uid}").get();
+    if (checking.exists) {
+      print("yes");
+    } else {
+      print("no");
+    }
+    _login(context);
   }
 
   void _appleLogin() {
     print("apple");
-  }
-
-  void _login(BuildContext context) {
-    Navigator.of(context).pushReplacementNamed('/second');
-    // Navigator.push(
-    //     context, MaterialPageRoute(builder: ((context) => MainGridView())));
   }
 
   @override
@@ -79,7 +96,7 @@ class _LoginWidget extends State<LoginWidget> {
             child: Image.asset("image/facebook_login.png", height: 60)));
 
     Widget _googleButton = GestureDetector(
-        onTap: () => _googleLogin(),
+        onTap: () => _googleLogin(context),
         child: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),

@@ -1,4 +1,7 @@
+import 'dart:isolate';
+
 import 'package:djm/djm_style.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:djm/shopinfo/shopInfoWidget.dart';
@@ -17,6 +20,8 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
   final double _animationSpeed = 430;
   final double _expandedHeight = 480;
 
+  GlobalKey<ScaffoldState> _key = GlobalKey();
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +35,16 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
   void dispose() {
     _colorAnimationController.dispose();
     super.dispose();
+  }
+
+  Future<void> _signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      print("signout");
+      Navigator.of(context).pushReplacementNamed('/login');
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   bool _scrollListner(ScrollNotification scrollState) {
@@ -46,6 +61,14 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
     double _marginLeft = MediaQuery.of(context).size.width * 0.03;
 
     return Scaffold(
+        key: _key,
+        endDrawer: Drawer(
+            child: SafeArea(
+          child: Column(children: [
+            Text("${FirebaseAuth.instance.currentUser?.email}"),
+            OutlinedButton(onPressed: () => _signOut(), child: Text("hi"))
+          ]),
+        )),
         backgroundColor: Colors.white,
         body: NotificationListener<ScrollNotification>(
             onNotification: _scrollListner,
@@ -55,6 +78,7 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
                     animation: _colorTween,
                     builder: (context, build) {
                       return SliverAppBar(
+                        centerTitle: true,
                         backgroundColor: Colors.white,
                         pinned: true,
                         floating: false,
@@ -75,10 +99,19 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
                         actions: [
                           IconButton(
                             icon: Icon(
-                              Icons.menu,
+                              Icons.search,
                               color: _colorTween.value,
                             ),
                             onPressed: () {},
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.menu,
+                              color: _colorTween.value,
+                            ),
+                            onPressed: () {
+                              _key.currentState?.openEndDrawer();
+                            },
                           )
                         ],
                         title: Text("대존맛",

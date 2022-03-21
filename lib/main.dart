@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:djm/djm_style.dart';
+import 'package:djm/login/addInfoWidget.dart';
 import 'package:djm/mainGrid/mainGrid.dart';
 import 'package:djm/shopinfo/shopInfoWidget.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,7 +10,7 @@ import 'package:djm/login/loginWidget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -23,9 +24,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.orange),
         routes: {
-          '/first': (BuildContext context) => LoginWidget(),
-          '/second': (BuildContext context) => MainGridView(),
+          '/login': (BuildContext context) => LoginWidget(),
+          '/main': (BuildContext context) => MainGridView(),
         },
-        home: LoginWidget());
+        home: AddInfoWidget());
   }
 }
