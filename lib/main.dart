@@ -26,7 +26,8 @@ class MyApp extends StatelessWidget {
         routes: {
           '/login': (BuildContext context) => LoginWidget(),
           '/main': (BuildContext context) => MainGridView(),
+          '/setUniv': (BuildContext context) => AddInfoWidget()
         },
-        home: AddInfoWidget());
+        home: LoginWidget());
   }
 }

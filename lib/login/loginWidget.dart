@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:djm/login/addInfoWidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:djm/djm_style.dart';
@@ -48,15 +49,26 @@ class _LoginWidget extends State<LoginWidget> {
 
     final UserCredential authResult =
         await _auth.signInWithCredential(credential);
-    final User? user = authResult.user;
+    final User? _user = authResult.user;
 
-    DocumentSnapshot checking = await _firestoreUser.doc("${user?.uid}").get();
+    DocumentSnapshot checking = await _firestoreUser.doc("${_user?.uid}").get();
     if (checking.exists) {
       print("yes");
+
+      _login(context);
     } else {
-      print("no");
+      _firestoreUser.doc("${_user?.uid}").set({
+        "email": _user?.email,
+        "sign": "google",
+        "uid": _user?.uid,
+        "name": _user?.displayName,
+        "photo": _user?.photoURL,
+        "university": "국민대",
+        "review": ""
+      });
+
+      Navigator.of(context).pushReplacementNamed('/setUniv');
     }
-    _login(context);
   }
 
   void _appleLogin() {
