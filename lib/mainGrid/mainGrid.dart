@@ -134,45 +134,6 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
                                 child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      GestureDetector(
-                                          onTap: () {
-                                            print("searchbar clicked");
-                                          },
-                                          child: Container(
-                                              margin: EdgeInsets.only(top: 120),
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.8,
-                                              height: 24,
-                                              decoration: BoxDecoration(
-                                                  color: Colors.white70,
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(40)),
-                                                  border: Border.all(
-                                                      color: Colors.white10,
-                                                      width: 2)),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 4),
-                                                      child: Text("검색어를 입력해주세요",
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .black45))),
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          right: 4),
-                                                      child: Icon(Icons.search,
-                                                          color: DJMstyle()
-                                                              .djm_color))
-                                                ],
-                                              ))),
                                       Padding(
                                           padding: EdgeInsets.only(top: 50),
                                           child: Text("국민대학교는...",
