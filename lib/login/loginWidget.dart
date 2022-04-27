@@ -1,11 +1,14 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:djm/login/addInfoWidget.dart';
+import 'package:djm/login/signUpWidget.dart';
+import 'package:djm/providor/userProvider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:djm/djm_style.dart';
 import 'package:djm/mainGrid/mainGrid.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginWidget extends StatefulWidget {
   State<StatefulWidget> createState() {
@@ -275,7 +278,15 @@ class _LoginWidget extends State<LoginWidget> {
                                     thickness: 1,
                                   )),
                               TextButton(
-                                onPressed: () => print("user enroll"),
+                                onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) =>
+                                            ChangeNotifierProvider(
+                                                create:
+                                                    (BuildContext context) =>
+                                                        UserProvider(),
+                                                child: SignUpWidget())))),
                                 child: Text("회원 가입", style: textButtonStyle),
                               )
                             ]),
