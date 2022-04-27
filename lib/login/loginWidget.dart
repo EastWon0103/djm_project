@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:djm/login/addInfoWidget.dart';
-import 'package:djm/login/signUpWidget.dart';
+import 'package:djm/login/enrollEmailWidget.dart';
 import 'package:djm/providor/userProvider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -286,7 +286,7 @@ class _LoginWidget extends State<LoginWidget> {
                                                 create:
                                                     (BuildContext context) =>
                                                         UserProvider(),
-                                                child: SignUpWidget())))),
+                                                child: EnrollEmailWidget())))),
                                 child: Text("회원 가입", style: textButtonStyle),
                               )
                             ]),

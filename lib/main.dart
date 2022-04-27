@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:djm/djm_style.dart';
 import 'package:djm/login/addInfoWidget.dart';
-import 'package:djm/login/signUpWidget.dart';
+import 'package:djm/login/enrollEmailWidget.dart';
 import 'package:djm/mainGrid/mainGrid.dart';
 import 'package:djm/shopinfo/shopInfoWidget.dart';
 import 'package:firebase_core/firebase_core.dart';

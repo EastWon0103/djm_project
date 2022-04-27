@@ -5,13 +5,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SignUpWidget extends StatefulWidget {
+class EnrollEmailWidget extends StatefulWidget {
   State<StatefulWidget> createState() {
-    return _SignUpWidget();
+    return _EnrollEmailWidget();
   }
 }
 
-class _SignUpWidget extends State<SignUpWidget> {
+class _EnrollEmailWidget extends State<EnrollEmailWidget> {
   final _emailConroller = TextEditingController();
   final _firestore = FirebaseFirestore.instance.collection("user");
   final _formKey = GlobalKey<FormState>();
