@@ -1,59 +1,42 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:djm/djm_style.dart';
-import 'package:djm/login/enrollPasswordWidget.dart';
+import 'package:djm/login/enrollUnivWidget.dart';
 import 'package:djm/providor/userProvider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class EnrollEmailWidget extends StatefulWidget {
+import '../djm_style.dart';
+
+class EnrollPasswordWidget extends StatefulWidget {
+  @override
   State<StatefulWidget> createState() {
-    return _EnrollEmailWidget();
+    return _EnrollPasswordWidget();
   }
 }
 
-class _EnrollEmailWidget extends State<EnrollEmailWidget> {
-  final _emailConroller = TextEditingController();
-  final _firestore = FirebaseFirestore.instance.collection("user");
-  final _formEmailKey = GlobalKey<FormState>();
+class _EnrollPasswordWidget extends State<EnrollPasswordWidget> {
+  final _formPasswordKey = GlobalKey<FormState>();
+  final _passwordController = TextEditingController();
+  bool _passwordVisible = true;
   String _errorMsg = "";
   late UserProvider _userProvider;
 
-  void _submit() {
-    _userProvider.email = _emailConroller.text;
-    Navigator.push(context,
-        MaterialPageRoute(builder: ((context) => EnrollPasswordWidget())));
-  }
-
-  void _checkEmail() async {
-    String pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regExp = new RegExp(pattern);
-
-    bool duplicate = false;
-    var duplicate_email = await _firestore.get().then((QuerySnapshot snapshot) {
-      snapshot.docs.forEach((doc) {
-        print(doc["email"]);
-        if (_emailConroller.text == doc["email"]) {
-          duplicate = true;
-        }
-      });
-    });
-
-    if (duplicate) {
+  void _check_password() {
+    String password = _passwordController.text;
+    final validSpecial = RegExp(r'^[a-zA-Z0-9 ]+$');
+    if (password.length < 8) {
       setState(() {
-        _errorMsg = "이미 이메일이 존재합니다.";
+        _errorMsg = "비밀번호는 8자리 이상이어야 합니다.";
       });
-    } else if (!regExp.hasMatch(_emailConroller.text)) {
+    } else if (validSpecial.hasMatch(password)) {
       setState(() {
-        _errorMsg = "올바르게 이메일을 입력하세요";
+        _errorMsg = "비밀번호는 특수문자를 포함해야 합니다.";
       });
     } else {
       setState(() {
         _errorMsg = "";
       });
-      _userProvider.email = _emailConroller.text;
-      _submit();
+      _userProvider.password = password;
+      Navigator.push(
+          context, MaterialPageRoute(builder: (_) => EnrollUnivWidget()));
     }
   }
 
@@ -72,7 +55,7 @@ class _EnrollEmailWidget extends State<EnrollEmailWidget> {
         ),
         body: SafeArea(
             child: Form(
-                key: _formEmailKey,
+                key: _formPasswordKey,
                 child: SingleChildScrollView(
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,35 +68,48 @@ class _EnrollEmailWidget extends State<EnrollEmailWidget> {
                       Container(
                           margin: EdgeInsets.only(left: 16, bottom: 8),
                           child: Row(children: [
-                            Text("아이디",
+                            Text("비밀번호",
                                 style: TextStyle(
                                     fontSize: 28,
                                     fontWeight: FontWeight.bold,
                                     color: DJMstyle().djm_color)),
                             Text("를 입력하세요",
                                 style: TextStyle(
-                                    fontSize: 28, fontWeight: FontWeight.bold))
+                                    fontSize: 28, fontWeight: FontWeight.bold)),
                           ])),
                       Container(
                           margin: EdgeInsets.only(left: 16, bottom: 160),
-                          child:
-                              Text("아이디는 이메일만 입력 가능합니다.", style: TextStyle())),
+                          child: Text("비밀번호는 8자 이상, 특수문자를 포함해야합니다.",
+                              style: TextStyle())),
                       Container(
                           margin: EdgeInsets.all(16),
                           child: TextFormField(
-                            keyboardType: TextInputType.emailAddress,
-                            controller: _emailConroller,
-                            decoration: InputDecoration(
+                              obscureText: _passwordVisible,
+                              keyboardType: TextInputType.visiblePassword,
+                              controller: _passwordController,
+                              decoration: InputDecoration(
                                 label: Text(_errorMsg,
-                                    style: TextStyle(color: Colors.red))),
-                          )),
+                                    style: TextStyle(color: Colors.red)),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                      _passwordVisible
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      color: Colors.grey),
+                                  onPressed: () {
+                                    setState(() {
+                                      _passwordVisible = !_passwordVisible;
+                                    });
+                                  },
+                                ),
+                              ))),
                       Align(
                           alignment: Alignment.center,
                           child: Container(
                               width: MediaQuery.of(context).size.width - 32,
                               child: ElevatedButton(
-                                  onPressed: () => _checkEmail(),
-                                  child: Text("이메일 입력완료",
+                                  onPressed: () => _check_password(),
+                                  child: Text("비밀번호 입력완료",
                                       style: TextStyle(color: Colors.white)))))
                     ])))));
   }

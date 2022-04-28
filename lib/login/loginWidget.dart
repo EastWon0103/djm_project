@@ -64,7 +64,7 @@ class _LoginWidget extends State<LoginWidget> {
         "email": _user?.email,
         "sign": "google",
         "uid": _user?.uid,
-        "name": _user?.displayName,
+        "name": "익명",
         "photo": _user?.photoURL,
         "university": "국민대",
         "review": ""
@@ -282,11 +282,7 @@ class _LoginWidget extends State<LoginWidget> {
                                     context,
                                     MaterialPageRoute(
                                         builder: ((context) =>
-                                            ChangeNotifierProvider(
-                                                create:
-                                                    (BuildContext context) =>
-                                                        UserProvider(),
-                                                child: EnrollEmailWidget())))),
+                                            EnrollEmailWidget()))),
                                 child: Text("회원 가입", style: textButtonStyle),
                               )
                             ]),
