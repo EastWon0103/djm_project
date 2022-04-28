@@ -36,6 +36,11 @@ class MyApp extends StatelessWidget {
               '/enrollPassword': (BuildContext context) =>
                   EnrollPasswordWidget()
             },
+            // onGenerateRoute: (RouteSettings settings){
+            //   if(settings.name == '/login'){
+            //     return CustomR
+            //   }
+            // },
             home: LoginWidget()));
   }
 }

@@ -19,9 +19,32 @@ class _EnrollUnivWidget extends State<EnrollUnivWidget> {
   void _tapUniv(String univ) async {
     _userProvider.univ = univ;
 
-    print(_userProvider.email.toString());
-    print(_userProvider.univ.toString());
-    // 회원가입 만들어야함
+    String input_email = _userProvider.email.toString();
+    String input_password = _userProvider.password.toString();
+    String input_univ = _userProvider.univ.toString();
+
+    String uid = "";
+    try {
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: input_email, password: input_password)
+          .then((value) => uid = value.user!.uid);
+    } catch (e) {
+      print(e);
+    } finally {
+      await FirebaseFirestore.instance.collection("user").doc(uid).set({
+        "email": input_email,
+        "sign": "local",
+        "uid": uid,
+        "name": "익명",
+        "photo":
+            "https://firebasestorage.googleapis.com/v0/b/djm-project-a2f8b.appspot.com/o/userprofile.png?alt=media&token=d964722c-0b67-4453-a701-fd7985164e85",
+        "university": input_univ,
+        "review": ""
+      });
+
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    }
   }
 
   Widget _univButton(String univ, String imageUrl) {
