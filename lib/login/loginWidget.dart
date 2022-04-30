@@ -9,6 +9,7 @@ import 'package:djm/djm_style.dart';
 import 'package:djm/mainGrid/mainGrid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginWidget extends StatefulWidget {
   State<StatefulWidget> createState() {
@@ -24,13 +25,28 @@ class _LoginWidget extends State<LoginWidget> {
   final CollectionReference _firestoreUser =
       FirebaseFirestore.instance.collection('user');
 
+  final TextEditingController _idController = TextEditingController();
+  final TextEditingController _pwController = TextEditingController();
+
   void initState() {
     _passwordVisible = false;
     _loginMaintain = false;
   }
 
-  void _login(BuildContext context) {
-    Navigator.of(context).pushReplacementNamed('/main');
+  void _login(BuildContext context) async {
+    try {
+      final UserCredential user = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: _idController.text, password: _pwController.text);
+
+      Navigator.of(context).pushReplacementNamed('/main');
+    } on FirebaseAuthException catch (e) {
+      Fluttertoast.showToast(
+          msg: "아이디(이메일) 혹은 비밀번호를 확인하세요",
+          backgroundColor: Colors.red,
+          gravity: ToastGravity.BOTTOM);
+      print("login error");
+    }
   }
 
   void _kakaoLogin() {
@@ -56,8 +72,6 @@ class _LoginWidget extends State<LoginWidget> {
 
     DocumentSnapshot checking = await _firestoreUser.doc("${_user?.uid}").get();
     if (checking.exists) {
-      print("yes");
-
       _login(context);
     } else {
       _firestoreUser.doc("${_user?.uid}").set({
@@ -187,6 +201,7 @@ class _LoginWidget extends State<LoginWidget> {
                             width: _widgetWidth,
                             padding: EdgeInsets.all(4),
                             child: TextFormField(
+                                controller: _idController,
                                 keyboardType: TextInputType.emailAddress,
                                 decoration: const InputDecoration(
                                     labelText: '이메일',
@@ -202,6 +217,7 @@ class _LoginWidget extends State<LoginWidget> {
                             width: _widgetWidth,
                             padding: EdgeInsets.all(4),
                             child: TextFormField(
+                                controller: _pwController,
                                 obscureText: !_passwordVisible,
                                 decoration: InputDecoration(
                                     labelText: '비밀번호',

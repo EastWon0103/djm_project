@@ -86,7 +86,7 @@ class _EnrollUnivWidget extends State<EnrollUnivWidget> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Text("리스트 준비중입니다...!");
             } else if (snapshot.data == null) {
-              return Text("삭제했습니다...!");
+              return Text("리스트가 비어 있습니다...!");
             } else {
               return Padding(
                   padding: EdgeInsets.all(12),

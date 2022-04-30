@@ -31,15 +31,20 @@ class _EnrollEmailWidget extends State<EnrollEmailWidget> {
     RegExp regExp = new RegExp(pattern);
 
     bool duplicate = false;
-    var duplicate_email = await _firestore.get().then((QuerySnapshot snapshot) {
-      snapshot.docs.forEach((doc) {
-        print(doc["email"]);
-        if (_emailConroller.text == doc["email"]) {
-          duplicate = true;
-        }
+    try {
+      var duplicate_email =
+          await _firestore.get().then((QuerySnapshot snapshot) {
+        snapshot.docs.forEach((doc) {
+          print(doc["email"]);
+          if (_emailConroller.text == doc["email"]) {
+            duplicate = true;
+          }
+        });
       });
-    });
-
+    } catch (e) {
+      print(e);
+      duplicate = false;
+    }
     if (duplicate) {
       setState(() {
         _errorMsg = "이미 이메일이 존재합니다.";
