@@ -135,7 +135,7 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Padding(
-                                          padding: EdgeInsets.only(top: 50),
+                                          padding: EdgeInsets.only(top: 176),
                                           child: Text("국민대학교는...",
                                               style: TextStyle(
                                                   fontSize: 20,
@@ -146,7 +146,7 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
                                               fontSize: 50)),
                                       Padding(
                                           padding: EdgeInsets.only(top: 50),
-                                          child: Text("평균학점은...",
+                                          child: Text("평균맛학점은...",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 20))),

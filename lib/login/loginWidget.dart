@@ -72,7 +72,7 @@ class _LoginWidget extends State<LoginWidget> {
 
     DocumentSnapshot checking = await _firestoreUser.doc("${_user?.uid}").get();
     if (checking.exists) {
-      _login(context);
+      Navigator.of(context).pushReplacementNamed('/main');
     } else {
       _firestoreUser.doc("${_user?.uid}").set({
         "email": _user?.email,
