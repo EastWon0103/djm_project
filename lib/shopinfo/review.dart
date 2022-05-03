@@ -1,4 +1,5 @@
 import 'package:djm/djm_style.dart';
+import 'package:djm/review/reviewMainWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -71,7 +72,12 @@ class Review extends StatelessWidget {
         margin: EdgeInsets.only(top: 12),
         width: _widgetWidth,
         child: OutlinedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: ((context) => ReviewMainWidget())));
+            },
             style: ButtonStyle(),
             child: Text("리뷰 더보기",
                 style: TextStyle(color: djm_style.djm_color, fontSize: 12))));
