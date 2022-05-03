@@ -42,19 +42,20 @@ class Review extends StatelessWidget {
         ));
 
     Widget _userProfile(String user_key) {
-      return FutureBuilder(
-          future:
-              FirebaseFirestore.instance.collection("user").doc(user_key).get(),
+      return StreamBuilder<DocumentSnapshot<Object?>>(
+          stream: FirebaseFirestore.instance
+              .collection("user")
+              .doc(user_key)
+              .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              print(snapshot.data.toString());
+              Map<String, dynamic> userSnap =
+                  snapshot.data?.data() as Map<String, dynamic>;
+
               return ClipRRect(
                   borderRadius: BorderRadius.circular(20),
-                  child: Image.network(
-                      "https://lh3.googleusercontent.com/a/AATXAJxM5Pk38wo6iUKh2ilJhPkbUEE7jAF_b7BtiiGb=s96-c",
-                      width: 40,
-                      height: 40,
-                      fit: BoxFit.cover));
+                  child: Image.network(userSnap["photo"],
+                      width: 40, height: 40, fit: BoxFit.cover));
             } else {
               return ClipRRect(
                   borderRadius: BorderRadius.circular(20),
@@ -63,7 +64,6 @@ class Review extends StatelessWidget {
                       width: 40,
                       height: 40,
                       fit: BoxFit.cover));
-              ;
             }
           });
     }
@@ -109,19 +109,22 @@ class Review extends StatelessWidget {
               ]));
     }
 
-    Widget _reviewButton = Container(
-        margin: EdgeInsets.only(top: 12),
-        width: _widgetWidth,
-        child: OutlinedButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: ((context) => ReviewMainWidget())));
-            },
-            style: ButtonStyle(),
-            child: Text("리뷰 더보기",
-                style: TextStyle(color: djm_style.djm_color, fontSize: 12))));
+    Widget _reviewButton(String shopId, String shopName) {
+      return Container(
+          margin: EdgeInsets.only(top: 12),
+          width: _widgetWidth,
+          child: OutlinedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) =>
+                            ReviewMainWidget(shopId, shopName))));
+              },
+              style: ButtonStyle(),
+              child: Text("리뷰 더보기",
+                  style: TextStyle(color: djm_style.djm_color, fontSize: 12))));
+    }
 
     Widget _reviewSection = FutureBuilder<DocumentSnapshot<Object?>>(
         future:
@@ -133,6 +136,7 @@ class Review extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           } else {
             List<dynamic> _reviewList = snapshot.data.data()["reviews"];
+            String _shopName = snapshot.data.data()["shop_name"];
 
             return Container(
                 height: 200,
@@ -141,7 +145,7 @@ class Review extends StatelessWidget {
                     _reviewDivider,
                     _reviewTitle,
                     _preview(_reviewList[0]),
-                    _reviewButton
+                    _reviewButton(snapshot.data.id, _shopName)
                   ],
                 ));
           }
