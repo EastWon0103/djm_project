@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:djm/djm_style.dart';
 import 'package:djm/shopinfo/imageWithInfo.dart';
 import 'package:flutter/material.dart';
@@ -5,16 +6,18 @@ import 'package:djm/shopinfo/menList.dart';
 import 'package:djm/shopinfo/review.dart';
 
 class ShopInfoWidget extends StatelessWidget {
-  late String index;
+  late int _index;
+  late AsyncSnapshot _snapshot;
 
-  ShopInfoWidget(int index) {
-    this.index = index.toString();
+  ShopInfoWidget(AsyncSnapshot snapshot, int index) {
+    _index = index;
+    _snapshot = snapshot;
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget _stackSection = ImageWithInfo(this.index);
-    Widget _menuSection = MenuList();
+    Widget _stackSection = ImageWithInfo(_snapshot, _index);
+    Widget _menuSection = MenuList(_snapshot.data.docs[_index]["menu"]);
     Widget _reviewSection = Review();
     return Scaffold(
         appBar: AppBar(

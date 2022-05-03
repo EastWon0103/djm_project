@@ -4,14 +4,16 @@ import 'package:flutter/widgets.dart';
 import 'dart:math';
 
 class ImageWithInfo extends StatefulWidget {
-  late String index;
+  late int _index;
+  late AsyncSnapshot _snapshot;
 
-  ImageWithInfo(String index) {
-    this.index = index;
+  ImageWithInfo(AsyncSnapshot snapshot, int index) {
+    _index = index;
+    _snapshot = snapshot;
   }
 
   State<StatefulWidget> createState() {
-    return _ImageWithInfo(this.index);
+    return _ImageWithInfo(_snapshot, _index);
   }
 }
 
@@ -24,9 +26,11 @@ class _ImageWithInfo extends State<ImageWithInfo>
 
   bool button_state = true;
 
-  late String index;
-  _ImageWithInfo(String index) {
-    this.index = index;
+  late int _index;
+  late AsyncSnapshot _snapshot;
+  _ImageWithInfo(AsyncSnapshot snapshot, int index) {
+    _index = index;
+    _snapshot = snapshot;
   }
 
   @override
@@ -71,7 +75,7 @@ class _ImageWithInfo extends State<ImageWithInfo>
 
     Widget _infoGrade = Container(
         margin: EdgeInsets.only(top: 20),
-        child: Text("A+",
+        child: Text(_snapshot.data.docs[_index]["grade"],
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 36,
@@ -79,7 +83,7 @@ class _ImageWithInfo extends State<ImageWithInfo>
 
     Widget _infoShopName = Container(
         margin: EdgeInsets.only(bottom: 4),
-        child: Text("기차순대국",
+        child: Text(_snapshot.data.docs[_index]["name"],
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
@@ -117,9 +121,13 @@ class _ImageWithInfo extends State<ImageWithInfo>
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text("서울 성북구 보국문로11길 18-6",
+                                          Text(
+                                              _snapshot.data.docs[_index]
+                                                  ["address_load"],
                                               style: djm_style.info_info),
-                                          Text("정릉동 398-9",
+                                          Text(
+                                              _snapshot.data.docs[_index]
+                                                  ["address_num"],
                                               style: djm_style.info_info)
                                         ],
                                       ))))
@@ -134,7 +142,8 @@ class _ImageWithInfo extends State<ImageWithInfo>
                                   TableCellVerticalAlignment.middle,
                               child: Container(
                                   margin: EdgeInsets.all(2),
-                                  child: Text("02-914-9316",
+                                  child: Text(
+                                      _snapshot.data.docs[_index]["call"],
                                       style: djm_style.info_info)))
                         ]),
                         TableRow(children: <Widget>[
@@ -154,10 +163,10 @@ class _ImageWithInfo extends State<ImageWithInfo>
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text("월~금: 00:00 - 00:00",
+                                          Text(
+                                              _snapshot.data.docs[_index]
+                                                  ["time"],
                                               style: djm_style.info_info),
-                                          Text("토~일: 00:00 - 00:00",
-                                              style: djm_style.info_info)
                                         ],
                                       ))))
                         ])
@@ -217,7 +226,7 @@ class _ImageWithInfo extends State<ImageWithInfo>
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(40.0),
                       bottomRight: Radius.circular(40.0)),
-                  child: Image.asset('image/train_test.jpg',
+                  child: Image.network(_snapshot.data.docs[_index]["shop_img"],
                       width: MediaQuery.of(context).size.width,
                       fit: BoxFit.fitWidth))
             ],

@@ -23,6 +23,7 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
 
   String _university = "";
   String _university_img = "";
+  String _univ_list = "";
 
   GlobalKey<ScaffoldState> _key = GlobalKey();
 
@@ -70,7 +71,8 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: ((context) => ShopInfoWidget(index))));
+                          builder: ((context) =>
+                              ShopInfoWidget(snapshot, index))));
                 },
                 child: Center(
                     child: Column(
@@ -145,20 +147,23 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
     setState(() {
       _university = univ;
       _university_img = univImg;
+      _univ_list = list_name;
     });
-    var referenceList = await FirebaseFirestore.instance
-        .collection(list_name)
-        .orderBy("grade")
-        .snapshots();
-
-    String shopkey = "";
-    String shopimg = "";
-    String name = "";
-    String grade = "";
-    String tag = "";
-
-    // 학교이미지
-    // 가게 이미지 / 태그 / 가게이름 / 학점
+    // var referenceList = await FirebaseFirestore.instance
+    //     .collection(list_name)
+    //     .orderBy("grade")
+    //     .snapshots();
+    // referenceList.forEach((element) {
+    //   element.docs["shot"];
+    // });
+    // String shopkey = "";
+    // String shopimg = "";
+    // String name = "";
+    // String grade = "";
+    // String tag = "";
+    // print("hi");
+    // // 학교이미지
+    // // 가게 이미지 / 태그 / 가게이름 / 학점
 
     return "string";
   }
@@ -191,7 +196,7 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
               if (snapshot.hasError) {
                 return Text("this is error");
               } else if (!snapshot.hasData) {
-                return Text("this is null");
+                return Center(child: CircularProgressIndicator());
               } else {
                 return NotificationListener<ScrollNotification>(
                     onNotification: _scrollListner,
@@ -309,83 +314,113 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
                                             color: DJMstyle().djm_color))
                                   ],
                                 ))),
-                        SliverPadding(
-                          padding: EdgeInsets.all(_marginLeft),
-                          sliver: SliverGrid(
-                            gridDelegate:
-                                const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 250.0,
-                              mainAxisExtent: 200.0,
-                              mainAxisSpacing: 5.0,
-                              crossAxisSpacing: 5.0,
-                            ),
-                            delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                                return GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: ((context) =>
-                                                  ShopInfoWidget(index))));
-                                    },
-                                    child: Center(
-                                        child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                          Container(
-                                              height: _gridSize,
-                                              width: _gridSize,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                        color: Colors.grey,
-                                                        offset:
-                                                            Offset(4.0, 4.0),
-                                                        blurRadius: 4.0,
-                                                        spreadRadius: 0)
-                                                  ]),
-                                              alignment: Alignment.center,
-                                              child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(20)),
-                                                  child: Image.asset(
-                                                    "image/train_test.jpg",
-                                                    fit: BoxFit.fitWidth,
-                                                    width: _gridSize,
-                                                  ))),
-                                          Padding(
-                                              padding: EdgeInsets.only(top: 4),
-                                              child: Text("한식",
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: DJMstyle()
-                                                          .djm_gray_color))),
-                                          Container(
-                                              width: _gridSize,
-                                              child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text("기차순대국"),
-                                                    Text("A+",
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: DJMstyle()
-                                                                .djm_color))
-                                                  ]))
-                                        ])));
-                              },
-                              childCount: 40,
-                            ),
-                          ),
-                        )
+                        StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection(_univ_list)
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) {
+                                return SliverToBoxAdapter(
+                                    child: Center(child: Text("is error")));
+                              } else if (!snapshot.hasData) {
+                                return SliverToBoxAdapter(
+                                    child: CircularProgressIndicator());
+                              } else {
+                                return SliverPadding(
+                                  padding: EdgeInsets.all(_marginLeft),
+                                  sliver: SliverGrid(
+                                    gridDelegate:
+                                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                                      maxCrossAxisExtent: 250.0,
+                                      mainAxisExtent: 200.0,
+                                      mainAxisSpacing: 5.0,
+                                      crossAxisSpacing: 5.0,
+                                    ),
+                                    delegate: SliverChildBuilderDelegate(
+                                      (BuildContext context, int index) {
+                                        return GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: ((context) =>
+                                                          ShopInfoWidget(
+                                                              snapshot,
+                                                              index))));
+                                            },
+                                            child: Center(
+                                                child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                  Container(
+                                                      height: _gridSize,
+                                                      width: _gridSize,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                                color:
+                                                                    Colors.grey,
+                                                                offset: Offset(
+                                                                    4.0, 4.0),
+                                                                blurRadius: 4.0,
+                                                                spreadRadius: 0)
+                                                          ]),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          20)),
+                                                          child: Image.network(
+                                                            snapshot.data?.docs[
+                                                                    index]
+                                                                ["shop_img"],
+                                                            fit: BoxFit.cover,
+                                                            width: _gridSize,
+                                                            height: _gridSize,
+                                                          ))),
+                                                  Padding(
+                                                      padding: EdgeInsets.only(
+                                                          top: 4),
+                                                      child: Text(
+                                                          "${snapshot.data?.docs[index]["tag"]}",
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color: DJMstyle()
+                                                                  .djm_gray_color))),
+                                                  Container(
+                                                      width: _gridSize,
+                                                      child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                                "${snapshot.data?.docs[index]["name"]}"),
+                                                            Text(
+                                                                "${snapshot.data?.docs[index]["grade"]}",
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color: DJMstyle()
+                                                                        .djm_color))
+                                                          ]))
+                                                ])));
+                                      },
+                                      childCount: snapshot.data?.docs.length,
+                                    ),
+                                  ),
+                                );
+                              }
+                            })
                       ],
                     ));
               }

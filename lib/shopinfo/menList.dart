@@ -3,7 +3,8 @@ import 'package:djm/djm_style.dart';
 import 'package:flutter/material.dart';
 
 class Menu {
-  String image_path = "image/train_menu";
+  String image_path =
+      "https://mp-seoul-image-production-s3.mangoplate.com/96315/1523303_1605266544808_28371?fit=around|512:512&crop=512:512;*,*&output-format=jpg&output-quality=80";
   String title = "순대국";
   String price = "8000";
 
@@ -30,7 +31,8 @@ class MenuWidget extends StatelessWidget {
                 width: 120,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage(_menu.image_path), fit: BoxFit.cover),
+                        image: NetworkImage(_menu.image_path),
+                        fit: BoxFit.cover),
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
@@ -55,6 +57,17 @@ class MenuWidget extends StatelessWidget {
 }
 
 class MenuList extends StatelessWidget {
+  List<Widget> _menuWidgetList = [];
+
+  MenuList(List<dynamic> firebaseMenu) {
+    firebaseMenu.forEach((element) {
+      _menuWidgetList.add(MenuWidget(Menu(
+          element["menu_img"] ??
+              "https://mp-seoul-image-production-s3.mangoplate.com/96315/1523303_1605266544808_28371?fit=around|512:512&crop=512:512;*,*&output-format=jpg&output-quality=80",
+          element["menu_name"] ?? "순대국",
+          element["menu_price"] ?? "8000")));
+    });
+  }
   @override
   Widget build(BuildContext context) {
     double _marginLeft =
@@ -74,18 +87,15 @@ class MenuList extends StatelessWidget {
             )
           ],
         ));
-    Menu _menu1 = Menu("image/train_menu.jpg", "순대국", "8000");
-
-    Widget _menuWidget = MenuWidget(_menu1);
 
     Widget _menuList = Container(
         height: 180,
         child: ListView.builder(
             padding: EdgeInsets.only(left: _marginLeft),
             scrollDirection: Axis.horizontal,
-            itemCount: 7,
+            itemCount: _menuWidgetList.length,
             itemBuilder: (context, index) {
-              return _menuWidget;
+              return _menuWidgetList[index];
             }));
     return Column(
       children: [_menuTitle, _menuList],
