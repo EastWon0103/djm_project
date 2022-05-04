@@ -8,17 +8,19 @@ import 'package:djm/shopinfo/review.dart';
 class ShopInfoWidget extends StatelessWidget {
   late int _index;
   late AsyncSnapshot _snapshot;
+  late String _univ_list;
 
-  ShopInfoWidget(AsyncSnapshot snapshot, int index) {
+  ShopInfoWidget(AsyncSnapshot snapshot, int index, String univ_list) {
     _index = index;
     _snapshot = snapshot;
+    _univ_list = univ_list;
   }
 
   @override
   Widget build(BuildContext context) {
     Widget _stackSection = ImageWithInfo(_snapshot, _index);
     Widget _menuSection = MenuList(_snapshot.data.docs[_index]["menu"]);
-    Widget _reviewSection = Review(_snapshot.data.docs[_index].id);
+    Widget _reviewSection = Review(_snapshot.data.docs[_index].id, _univ_list);
     return Scaffold(
         appBar: AppBar(
             backgroundColor: Colors.white,

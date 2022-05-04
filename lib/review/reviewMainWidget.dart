@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 class ReviewMainWidget extends StatelessWidget {
   String _shopId = "";
   String _shopName = "";
+  String _univList = "";
 
-  ReviewMainWidget(String shopId, String shopName) {
+  ReviewMainWidget(String shopId, String shopName, String univList) {
     _shopId = shopId;
     _shopName = shopName;
+    _univList = univList;
   }
 
   Widget _reviewItem(Map<String, dynamic> review) {
@@ -154,7 +156,7 @@ class ReviewMainWidget extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: ((context) =>
-                      ReviewPostWidget(_shopId, _shopName)))),
+                      ReviewPostWidget(_shopId, _shopName, _univList)))),
           child: Icon(
             Icons.edit_note,
             color: Colors.white,

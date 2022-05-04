@@ -6,9 +6,11 @@ import 'package:flutter/widgets.dart';
 
 class Review extends StatelessWidget {
   late String _docId = "";
+  late String _univList;
 
-  Review(String id) {
+  Review(String id, String univ_list) {
     _docId = id;
+    _univList = univ_list;
   }
 
   Widget build(BuildContext context) {
@@ -119,7 +121,7 @@ class Review extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: ((context) =>
-                            ReviewMainWidget(shopId, shopName))));
+                            ReviewMainWidget(shopId, shopName, _univList))));
               },
               style: ButtonStyle(),
               child: Text("리뷰 더보기",

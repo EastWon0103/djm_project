@@ -7,12 +7,28 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:917237118311:android:9140fc20dd793ab57dabc2",
+        "mobilesdk_app_id": "1:917237118311:android:aec865b3c75f44497dabc2",
         "android_client_info": {
-          "package_name": "com.example.test_flutter"
+          "package_name": "com.example.djm"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "917237118311-4kd1ujjaeqcjk3c6tdmdbr9jsbpeu31v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.djm",
+            "certificate_hash": "c5b0ab3e03d01d536267c57cac01b92fc531d651"
+          }
+        },
+        {
+          "client_id": "917237118311-krblhfl65i3oka3fejsb6jr7i8rn1ujq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.djm",
+            "certificate_hash": "f1f621a23318451f7494736f1661ad5c3f05ca59"
+          }
+        },
         {
           "client_id": "917237118311-rcc47ugb8p771q0ibtcf94ivr7fbjvj9.apps.googleusercontent.com",
           "client_type": 3
@@ -29,6 +45,13 @@
             {
               "client_id": "917237118311-rcc47ugb8p771q0ibtcf94ivr7fbjvj9.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "917237118311-8lq0ih980q2els5llp1homaoil67k7hn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.djm"
+              }
             }
           ]
         }

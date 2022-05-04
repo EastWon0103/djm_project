@@ -52,78 +52,6 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
     }
   }
 
-  Widget _sliverGrid(BuildContext context, AsyncSnapshot snapshot) {
-    double _gridSize = MediaQuery.of(context).size.width * 0.4;
-    double _marginLeft = MediaQuery.of(context).size.width * 0.03;
-    return SliverPadding(
-      padding: EdgeInsets.all(_marginLeft),
-      sliver: SliverGrid(
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 250.0,
-          mainAxisExtent: 200.0,
-          mainAxisSpacing: 5.0,
-          crossAxisSpacing: 5.0,
-        ),
-        delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: ((context) =>
-                              ShopInfoWidget(snapshot, index))));
-                },
-                child: Center(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                      Container(
-                          height: _gridSize,
-                          width: _gridSize,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey,
-                                    offset: Offset(4.0, 4.0),
-                                    blurRadius: 4.0,
-                                    spreadRadius: 0)
-                              ]),
-                          alignment: Alignment.center,
-                          child: ClipRRect(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              child: Image.asset(
-                                "image/train_test.jpg",
-                                fit: BoxFit.fitWidth,
-                                width: _gridSize,
-                              ))),
-                      Padding(
-                          padding: EdgeInsets.only(top: 4),
-                          child: Text("한식",
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: DJMstyle().djm_gray_color))),
-                      Container(
-                          width: _gridSize,
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("기차순대국"),
-                                Text("A+",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: DJMstyle().djm_color))
-                              ]))
-                    ])));
-          },
-          childCount: 40,
-        ),
-      ),
-    );
-  }
-
   Future<String> _getData() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     String univ = "";
@@ -149,22 +77,6 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
       _university_img = univImg;
       _univ_list = list_name;
     });
-    // var referenceList = await FirebaseFirestore.instance
-    //     .collection(list_name)
-    //     .orderBy("grade")
-    //     .snapshots();
-    // referenceList.forEach((element) {
-    //   element.docs["shot"];
-    // });
-    // String shopkey = "";
-    // String shopimg = "";
-    // String name = "";
-    // String grade = "";
-    // String tag = "";
-    // print("hi");
-    // // 학교이미지
-    // // 가게 이미지 / 태그 / 가게이름 / 학점
-
     return "string";
   }
 
@@ -346,7 +258,8 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
                                                       builder: ((context) =>
                                                           ShopInfoWidget(
                                                               snapshot,
-                                                              index))));
+                                                              index,
+                                                              _univ_list))));
                                             },
                                             child: Center(
                                                 child: Column(
