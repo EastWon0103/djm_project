@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:djm/djm_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -6,8 +9,9 @@ import 'dart:math';
 class ImageWithInfo extends StatefulWidget {
   late int _index;
   late AsyncSnapshot _snapshot;
+  late String _univ_list;
 
-  ImageWithInfo(AsyncSnapshot snapshot, int index) {
+  ImageWithInfo(AsyncSnapshot snapshot, int index, this._univ_list) {
     _index = index;
     _snapshot = snapshot;
   }
@@ -24,7 +28,7 @@ class _ImageWithInfo extends State<ImageWithInfo>
   late Animation _rotateAnimation;
   late Animation<double> _sizeAnimation;
 
-  bool button_state = true;
+  bool _button_state = true;
 
   late int _index;
   late AsyncSnapshot _snapshot;
@@ -59,7 +63,7 @@ class _ImageWithInfo extends State<ImageWithInfo>
     } else {
       _animationController.reverse();
     }
-    button_state = !button_state;
+    _button_state = !_button_state;
   }
 
   @override
@@ -73,13 +77,36 @@ class _ImageWithInfo extends State<ImageWithInfo>
     double _menuMarginLeft =
         (MediaQuery.of(context).size.width - _infoSection_width) / 2;
 
-    Widget _infoGrade = Container(
-        margin: EdgeInsets.only(top: 20),
-        child: Text(_snapshot.data.docs[_index]["grade"],
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 36,
-                color: djm_style.djm_color)));
+    Widget _infoGrade = StreamBuilder<DocumentSnapshot<Object?>>(
+        stream: FirebaseFirestore.instance
+            .collection(widget._univ_list)
+            .doc(_snapshot.data.docs[_index]["key"])
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text("Error");
+          } else if (!snapshot.hasData) {
+            return CircularProgressIndicator();
+          } else {
+            Map<String, dynamic> docJson =
+                snapshot.data?.data() as Map<String, dynamic>;
+
+            return Container(
+                margin: EdgeInsets.only(top: 20),
+                child: Text(docJson["grade"],
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 36,
+                        color: djm_style.djm_color)));
+          }
+        });
+    // Container(
+    //     margin: EdgeInsets.only(top: 20),
+    //     child: Text(_snapshot.data.docs[_index]["grade"],
+    //         style: TextStyle(
+    //             fontWeight: FontWeight.bold,
+    //             fontSize: 36,
+    //             color: djm_style.djm_color)));
 
     Widget _infoShopName = Container(
         margin: EdgeInsets.only(bottom: 4),
@@ -234,7 +261,7 @@ class _ImageWithInfo extends State<ImageWithInfo>
       AnimatedContainer(
           duration: Duration(milliseconds: 600),
           curve: Curves.easeInBack,
-          height: button_state ? 104 : 204)
+          height: _button_state ? 104 : 204)
     ]);
 
     Widget _stackSection = Container(

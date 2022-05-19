@@ -57,7 +57,7 @@ class MenuWidget extends StatelessWidget {
 }
 
 class MenuList extends StatelessWidget {
-  List<Widget> _menuWidgetList = [];
+  List<MenuWidget> _menuWidgetList = [];
 
   MenuList(List<dynamic> firebaseMenu) {
     firebaseMenu.forEach((element) {

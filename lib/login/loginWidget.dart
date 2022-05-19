@@ -33,6 +33,13 @@ class _LoginWidget extends State<LoginWidget> {
     _loginMaintain = false;
   }
 
+  @override
+  void dispose() {
+    _idController.dispose();
+    _pwController.dispose();
+    super.dispose();
+  }
+
   void _login(BuildContext context) async {
     try {
       final UserCredential user = await FirebaseAuth.instance

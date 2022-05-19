@@ -18,7 +18,7 @@ class ShopInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget _stackSection = ImageWithInfo(_snapshot, _index);
+    Widget _stackSection = ImageWithInfo(_snapshot, _index, _univ_list);
     Widget _menuSection = MenuList(_snapshot.data.docs[_index]["menu"]);
     Widget _reviewSection = Review(_snapshot.data.docs[_index].id, _univ_list);
     return Scaffold(

@@ -97,8 +97,13 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
         endDrawer: Drawer(
             child: SafeArea(
           child: Column(children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.network(
+                  "${FirebaseAuth.instance.currentUser?.photoURL}"),
+            ),
             Text("${FirebaseAuth.instance.currentUser?.email}"),
-            OutlinedButton(onPressed: () => _signOut(), child: Text("hi"))
+            OutlinedButton(onPressed: () => _signOut(), child: Text("로그아웃"))
           ]),
         )),
         backgroundColor: Colors.white,
@@ -229,6 +234,7 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
                         StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
                                 .collection(_univ_list)
+                                .orderBy("grade")
                                 .snapshots(),
                             builder: (context, snapshot) {
                               if (snapshot.hasError) {
@@ -339,140 +345,4 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
               }
             }));
   }
-
-  // Widget build(BuildContext context) {
-  //   double _marginLeft = MediaQuery.of(context).size.width * 0.03;
-
-  //   return Scaffold(
-  //       key: _key,
-  //       endDrawer: Drawer(
-  //           child: SafeArea(
-  //         child: Column(children: [
-  //           Text("${FirebaseAuth.instance.currentUser?.email}"),
-  //           OutlinedButton(onPressed: () => _signOut(), child: Text("hi"))
-  //         ]),
-  //       )),
-  //       backgroundColor: Colors.white,
-  //       body: NotificationListener<ScrollNotification>(
-  //           onNotification: _scrollListner,
-  //           child: CustomScrollView(
-  //             slivers: <Widget>[
-  //               AnimatedBuilder(
-  //                   animation: _colorTween,
-  //                   builder: (context, build) {
-  //                     return SliverAppBar(
-  //                       centerTitle: true,
-  //                       backgroundColor: Colors.white,
-  //                       pinned: true,
-  //                       floating: false,
-  //                       snap: false,
-  //                       expandedHeight: _expandedHeight,
-  //                       leadingWidth: 78,
-  //                       leading: Padding(
-  //                           padding: EdgeInsets.only(left: 15),
-  //                           child: InkWell(
-  //                               onTap: () => print("leading click"),
-  //                               child: Row(children: [
-  //                                 Text("국민대",
-  //                                     style:
-  //                                         TextStyle(color: _colorTween.value)),
-  //                                 Icon(Icons.arrow_drop_down_rounded,
-  //                                     color: _colorTween.value)
-  //                               ]))),
-  //                       actions: [
-  //                         IconButton(
-  //                           icon: Icon(
-  //                             Icons.search,
-  //                             color: _colorTween.value,
-  //                           ),
-  //                           onPressed: () {},
-  //                         ),
-  //                         IconButton(
-  //                           icon: Icon(
-  //                             Icons.menu,
-  //                             color: _colorTween.value,
-  //                           ),
-  //                           onPressed: () {
-  //                             _key.currentState?.openEndDrawer();
-  //                           },
-  //                         )
-  //                       ],
-  //                       title: Text("대존맛",
-  //                           style: TextStyle(
-  //                               fontFamily: 'KotraHands',
-  //                               fontSize: 20,
-  //                               color: _colorTween.value)),
-  //                       flexibleSpace: FlexibleSpaceBar(
-  //                           background: Container(
-  //                               height: _expandedHeight,
-  //                               decoration: BoxDecoration(
-  //                                 borderRadius: BorderRadius.only(
-  //                                     bottomLeft: Radius.circular(80)),
-  //                                 image: DecorationImage(
-  //                                     image: AssetImage('image/kookmin.jpeg'),
-  //                                     fit: BoxFit.fitHeight,
-  //                                     colorFilter: ColorFilter.mode(
-  //                                         Colors.black54, BlendMode.darken)),
-  //                               ),
-  //                               child: Column(
-  //                                   mainAxisAlignment: MainAxisAlignment.start,
-  //                                   children: [
-  //                                     Padding(
-  //                                         padding: EdgeInsets.only(top: 176),
-  //                                         child: Text("국민대학교는...",
-  //                                             style: TextStyle(
-  //                                                 fontSize: 20,
-  //                                                 color: Colors.white))),
-  //                                     Text("알콜사랑꾼",
-  //                                         style: TextStyle(
-  //                                             color: Colors.white,
-  //                                             fontSize: 50)),
-  //                                     Padding(
-  //                                         padding: EdgeInsets.only(top: 50),
-  //                                         child: Text("평균맛학점은...",
-  //                                             style: TextStyle(
-  //                                                 color: Colors.white,
-  //                                                 fontSize: 20))),
-  //                                     Text("4.3",
-  //                                         style: TextStyle(
-  //                                             color: DJMstyle().djm_color,
-  //                                             fontSize: 55)),
-  //                                   ]))),
-  //                     );
-  //                   }),
-  //               SliverToBoxAdapter(
-  //                   child: Container(
-  //                       margin: EdgeInsets.only(
-  //                           bottom: 8, top: 20, left: _marginLeft * 2),
-  //                       child: Row(
-  //                         children: [
-  //                           Text(
-  //                             "대표",
-  //                             style: TextStyle(
-  //                                 fontSize: 24,
-  //                                 //fontWeight: FontWeight.bold,
-  //                                 color: DJMstyle().djm_black_color),
-  //                           ),
-  //                           Padding(padding: EdgeInsets.all(2)),
-  //                           Text("맛집",
-  //                               style: TextStyle(
-  //                                   fontSize: 24,
-  //                                   //fontWeight: FontWeight.bold,
-  //                                   color: DJMstyle().djm_color))
-  //                         ],
-  //                       ))),
-  //               FutureBuilder(
-  //                   future: _getData(),
-  //                   builder: (context, snapshot) {
-  //                     if (snapshot.hasError) {
-  //                       return SliverToBoxAdapter(child: Text("this is error"));
-  //                     } else if (!snapshot.hasData) {
-  //                       return SliverToBoxAdapter(child: Text("this is null"));
-  //                     } else {
-  //                       return _sliverGrid(context, snapshot);
-  //                     }
-  //                   }),
-  //             ],
-  //           )));
-  // }
 }

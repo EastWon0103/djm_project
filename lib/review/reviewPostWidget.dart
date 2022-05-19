@@ -190,13 +190,13 @@ class _ReviewPostWidget extends State<ReviewPostWidget> {
     if (_urlList != null && _urlList.length > 0) {
       if (_urlList.length == 1) {
         _img1 = await _urlList[0];
-      } else if (_urlList.length == 1) {
+      } else if (_urlList.length == 2) {
         _img1 = await _urlList[0];
         _img2 = await _urlList[1];
-      } else {
+      } else if (_urlList.length == 3) {
         _img1 = await _urlList[0];
         _img2 = await _urlList[1];
-        _img1 = await _urlList[2];
+        _img3 = await _urlList[2];
       }
     }
 
