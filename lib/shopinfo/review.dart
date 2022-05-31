@@ -128,9 +128,11 @@ class Review extends StatelessWidget {
                   style: TextStyle(color: djm_style.djm_color, fontSize: 12))));
     }
 
-    Widget _reviewSection = FutureBuilder<DocumentSnapshot<Object?>>(
-        future:
-            FirebaseFirestore.instance.collection("review").doc(_docId).get(),
+    Widget _reviewSection = StreamBuilder<DocumentSnapshot<Object?>>(
+        stream: FirebaseFirestore.instance
+            .collection("review")
+            .doc(_docId)
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasError) {
             return Text("this is error");
