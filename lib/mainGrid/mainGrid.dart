@@ -52,7 +52,7 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
     }
   }
 
-  Future<void> _getData() async {
+  Future<String> _getData() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     String univ = "";
     String univImg = "";
@@ -77,7 +77,7 @@ class _MainGridView extends State<MainGridView> with TickerProviderStateMixin {
       _university_img = univImg;
       _univ_list = list_name;
     });
-    return;
+    return "null";
   }
 
   bool _scrollListner(ScrollNotification scrollState) {

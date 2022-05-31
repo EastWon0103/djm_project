@@ -228,7 +228,7 @@ class _ReviewPostWidget extends State<ReviewPostWidget> {
     });
 
     String _avgGrade = _getAvg(_gradeList);
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection(_univList)
         .doc(_shopId)
         .update({"grade": _avgGrade});
