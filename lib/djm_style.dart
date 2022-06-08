@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+/*
+  대존맛 스타일 클래스
+  Singletone 패턴
+*/
+
 class DJMstyle {
   static final DJMstyle _djmStyle = DJMstyle._internal();
   static const Color _djm_color = Color(0xffff7a00);
